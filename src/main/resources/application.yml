@@ -4,17 +4,24 @@ server:
 spring:
   application:
     name: content-service
-
   h2:
     console:
       enabled: true
       settings:
         web-allow-others: true
       path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-#    username:sa
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@oioproject_high?TNS_ADMIN=/oracleCloud/Wallet_oioproject
+    username: admin
+    password: oioProject2023
 
 eureka:
   instance:
@@ -24,3 +31,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    org.hibernate.sql: debug
