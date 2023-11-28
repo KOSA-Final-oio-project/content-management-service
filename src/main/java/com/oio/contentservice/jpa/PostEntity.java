@@ -1,13 +1,16 @@
 package com.oio.contentservice.jpa;
 
 import com.oio.contentservice.jpa.status.Status;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Table(name = "post")
 @SequenceGenerator(
         name = "SEQ_GENERATOR",
@@ -33,7 +36,7 @@ public class PostEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "post")
-    private List<ReplyEntity> replies;
+//    @OneToMany(mappedBy = "post")
+//    private List<ReplyEntity> replies;
 
 }
