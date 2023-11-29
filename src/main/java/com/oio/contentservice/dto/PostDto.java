@@ -1,23 +1,26 @@
 package com.oio.contentservice.dto;
 
-import com.oio.contentservice.jpa.status.Status;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @Builder
 @AllArgsConstructor
-@NotNull
+@NoArgsConstructor
+@ToString
 public class PostDto {
 
-    private Long id;
+    private Long pno;
+    @NotEmpty
     private String memberEmail;
+    @NotEmpty
     private String title;
+    @NotEmpty
     private String content;
-    private Status status;
-
-
+    @NotEmpty
+    private String category;
+    @NotEmpty
+    private String status;
+    private String password;
 }
