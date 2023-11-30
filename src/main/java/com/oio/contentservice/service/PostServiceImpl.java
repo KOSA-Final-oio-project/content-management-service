@@ -1,17 +1,22 @@
 package com.oio.contentservice.service;
 
+import com.oio.contentservice.dto.PageRequestDto;
+import com.oio.contentservice.dto.PageResponseDto;
 import com.oio.contentservice.dto.PostDto;
 import com.oio.contentservice.jpa.PostEntity;
 import com.oio.contentservice.repository.PostRepository;
 import com.oio.contentservice.vo.ResponseModify;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,13 +38,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostByAll() {
+    public List<PostDto> getPostAll() {
 
         List<PostEntity> list = postRepository.findAll();
 
         List<PostDto> resultPost = new ArrayList<>();
 
-        list.forEach(p->{
+        list.forEach(p -> {
             PostDto postDto = modelMapper.map(p, PostDto.class);
             resultPost.add(postDto);
         });
@@ -81,5 +86,24 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteById(pno);
     }
 
+    @Override
+    public PageResponseDto<PostDto> getPosts(PageRequestDto pageRequestDto) {
 
+        String[] types = pageRequestDto.getTypes();
+        String keyword = pageRequestDto.getKeyword();
+        Pageable pageable = pageRequestDto.getPageable("pno");
+
+        Page<PostEntity> result = postRepository.searchAll(types, keyword, pageable);
+
+        List<PostDto> dtoList = result.getContent().stream()
+                .map(p -> modelMapper.map(p, PostDto.class)).collect(Collectors.toList());
+
+        PageResponseDto<PostDto> pageResponseDto= PageResponseDto.<PostDto>withAll()
+                .pageRequestDto(pageRequestDto)
+                .dtoList(dtoList)
+                .total((int)result.getTotalElements())
+                .build();
+
+        return pageResponseDto;
+    }
 }

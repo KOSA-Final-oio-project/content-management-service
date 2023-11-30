@@ -1,5 +1,7 @@
 package com.oio.contentservice.controller;
 
+import com.oio.contentservice.dto.PageRequestDto;
+import com.oio.contentservice.dto.PageResponseDto;
 import com.oio.contentservice.dto.PostDto;
 import com.oio.contentservice.service.PostService;
 import com.oio.contentservice.vo.ResponseModify;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/")
@@ -25,7 +26,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping (value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping (value = "/post/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Long> register(@Valid @RequestBody PostDto postDto,
                                       BindingResult bindingResult) throws BindException {
 
@@ -43,14 +44,16 @@ public class PostController {
     }
 
     @GetMapping ("/posts")
-    public ResponseEntity<List<PostDto>> getPosts(){
+    public ResponseEntity<PageResponseDto> getPosts(PageRequestDto pageRequestDto){
 
-        List<PostDto> postList = postService.getPostByAll();
+//        List<PostDto> postList = postService.getPostAll();
 
-        return ResponseEntity.status(HttpStatus.OK).body(postList);
+        PageResponseDto<PostDto> pageResponseDto = postService.getPosts(pageRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(pageResponseDto);
     }
 
-    @GetMapping("/{pno}")
+    @GetMapping("/post/{pno}")
     public ResponseEntity<PostDto> getPost(@PathVariable("pno") Long pno){
 
         PostDto postDto = postService.getPostById(pno);
@@ -58,7 +61,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(postDto);
     }
 
-    @PutMapping(value = "/{pno}" , consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/post/{pno}" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseModify> modify(@PathVariable("pno") Long pno, @RequestBody PostDto postDto){
 
         postDto.setPno(pno);
@@ -68,7 +71,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(responseModify);
     }
 
-    @DeleteMapping("/{pno}")
+    @DeleteMapping("/post/{pno}")
     public Map<String, Long> remove(@PathVariable("pno") Long pno){
 
         postService.removePost(pno);
@@ -79,16 +82,5 @@ public class PostController {
 
         return resultMap;
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }
