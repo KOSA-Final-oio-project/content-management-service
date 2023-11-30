@@ -32,11 +32,11 @@ public class ReplyEntity {
 
     private String replyer;
 
-    @Column(nullable = false,updatable = false, insertable = false)
+    @Column(nullable = false, updatable = false, insertable = false)
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private Date createdAt;
 
-    public void changeText(String text){
+    public void changeText(String text) {
         this.replyText = text;
     }
 }
