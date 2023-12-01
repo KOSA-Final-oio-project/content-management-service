@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -11,30 +12,16 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PostDto {
+public class ReplyDto {
 
+    private Long rno;
+    @NotNull
     private Long pno;
-
     @NotEmpty
-    private String nickName;
-
+    private String replyText;
     @NotEmpty
-    private String title;
-
-    @NotEmpty
-    private String content;
-
-    @NotEmpty
-    private String category;
-
-    @NotEmpty
-    private int status;
-
-    @NotEmpty
-    private int key;
-
-    private String password;
-
+    private String replyer;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
+
 }

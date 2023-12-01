@@ -4,7 +4,8 @@ import com.oio.contentservice.dto.PageRequestDto;
 import com.oio.contentservice.dto.PageResponseDto;
 import com.oio.contentservice.dto.PostDto;
 import com.oio.contentservice.service.PostService;
-import com.oio.contentservice.vo.ResponseModify;
+import com.oio.contentservice.vo.RequestPostModify;
+import com.oio.contentservice.vo.ResponsePostModify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -26,13 +27,15 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping (value = "/post/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Long> register(@Valid @RequestBody PostDto postDto,
+    @PostMapping (value = "/post/register/{nickName}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Long> register(@PathVariable("nickName") String nickName, @Valid @RequestBody PostDto postDto,
                                       BindingResult bindingResult) throws BindException {
 
         if(bindingResult.hasErrors()){
             throw new BindException(bindingResult);
         }
+
+        postDto.setNickName(nickName);
 
         Long pno = postService.register(postDto);
 
@@ -62,11 +65,17 @@ public class PostController {
     }
 
     @PutMapping(value = "/post/{pno}" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseModify> modify(@PathVariable("pno") Long pno, @RequestBody PostDto postDto){
+    public ResponseEntity<ResponsePostModify> modify(@PathVariable("pno") Long pno,
+                                                     @Valid @RequestBody RequestPostModify RequestPostModify,
+                                                     BindingResult bindingResult) throws BindException {
 
-        postDto.setPno(pno);
+        if(bindingResult.hasErrors()){
+            throw new BindException(bindingResult);
+        }
 
-        ResponseModify responseModify = postService.modifyPost(postDto);
+        RequestPostModify.setPno(pno);
+
+        ResponsePostModify responseModify = postService.modifyPost(RequestPostModify);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseModify);
     }
@@ -82,5 +91,4 @@ public class PostController {
 
         return resultMap;
     }
-
 }

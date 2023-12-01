@@ -15,8 +15,8 @@ public class PostRepositoryTests {
     public void testRepoRegister(){
         PostEntity postEntity = PostEntity.builder()
                 .title("title.....")
-                .memberEmail("12345@naver.com")
                 .content("content....")
+                .nickName("nickName")
                 .category("Q&A")
                 .build();
         postRepository.save(postEntity);

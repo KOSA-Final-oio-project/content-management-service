@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class ResponseModify {
+public class ResponsePostModify {
 
     private String title;
     private String content;

@@ -17,7 +17,7 @@ public class PostSeviceTests {
         PostDto postDto = PostDto.builder()
                 .title("test.....")
                 .category("공지사항")
-                .memberEmail("oio@naver.com")
+                .nickName("nickName")
                 .content("content.....")
                 .build();
 

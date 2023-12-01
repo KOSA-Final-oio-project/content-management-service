@@ -3,7 +3,8 @@ package com.oio.contentservice.service;
 import com.oio.contentservice.dto.PageRequestDto;
 import com.oio.contentservice.dto.PageResponseDto;
 import com.oio.contentservice.dto.PostDto;
-import com.oio.contentservice.vo.ResponseModify;
+import com.oio.contentservice.vo.RequestPostModify;
+import com.oio.contentservice.vo.ResponsePostModify;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface PostService {
 
     PostDto getPostById(Long pno);
 
-    ResponseModify modifyPost(PostDto postDto);
+    ResponsePostModify modifyPost(RequestPostModify RequestPostModify);
 
     void removePost(Long pno);
 

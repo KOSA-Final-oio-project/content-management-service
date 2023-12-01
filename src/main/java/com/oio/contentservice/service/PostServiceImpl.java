@@ -5,7 +5,8 @@ import com.oio.contentservice.dto.PageResponseDto;
 import com.oio.contentservice.dto.PostDto;
 import com.oio.contentservice.jpa.PostEntity;
 import com.oio.contentservice.repository.PostRepository;
-import com.oio.contentservice.vo.ResponseModify;
+import com.oio.contentservice.vo.RequestPostModify;
+import com.oio.contentservice.vo.ResponsePostModify;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -65,17 +66,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResponseModify modifyPost(PostDto postDto) {
+    public ResponsePostModify modifyPost(RequestPostModify RequestPostModify) {
 
-        Optional<PostEntity> result = postRepository.findById(postDto.getPno());
+        Optional<PostEntity> result = postRepository.findById(RequestPostModify.getPno());
 
         PostEntity postEntity = result.orElseThrow();
 
-        postEntity.change(postDto.getTitle(), postDto.getContent());
+        postEntity.change(RequestPostModify.getTitle(), RequestPostModify.getContent());
 
         postRepository.save(postEntity);
 
-        ResponseModify responseModify = modelMapper.map(postEntity, ResponseModify.class);
+        ResponsePostModify responseModify = modelMapper.map(postEntity, ResponsePostModify.class);
 
         return responseModify;
     }

@@ -11,27 +11,28 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import java.util.List;
 
-public class PostSearchImpl extends QuerydslRepositorySupport implements PostSearch{
+public class PostSearchImpl extends QuerydslRepositorySupport implements PostSearch {
 
-    public PostSearchImpl(){
+    public PostSearchImpl() {
         super(PostEntity.class);
     }
+
     @Override
     public Page<PostEntity> searchAll(String[] types, String keyword, Pageable pageable) {
 
         QPostEntity post = QPostEntity.postEntity;
         JPQLQuery<PostEntity> query = from(post);
 
-        if((types != null && types.length > 0) && keyword != null) {
+        if ((types != null && types.length > 0) && keyword != null) {
             BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-            for(String type: types){
-                switch (type){
+            for (String type : types) {
+                switch (type) {
                     case "t":
                         booleanBuilder.or(post.title.contains(keyword));
                         break;
                     case "w":
-                        booleanBuilder.or(post.memberEmail.contains(keyword));
+                        booleanBuilder.or(post.nickName.contains(keyword));
                         break;
                 }
             }

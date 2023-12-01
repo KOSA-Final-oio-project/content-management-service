@@ -24,11 +24,11 @@ public class ReplyEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GENERATOR")
     private Long rno;
 
-    @Column(nullable = false)
-    private String replyText;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private PostEntity post;
+
+    @Column(nullable = false)
+    private String replyText;
 
     private String replyer;
 
