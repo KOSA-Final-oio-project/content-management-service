@@ -4,12 +4,13 @@ import com.oio.contentservice.dto.PageRequestDto;
 import com.oio.contentservice.dto.PageResponseDto;
 import com.oio.contentservice.dto.PostDto;
 import com.oio.contentservice.service.PostService;
+import com.oio.contentservice.service.ReplyService;
 import com.oio.contentservice.vo.RequestPostModify;
+import com.oio.contentservice.vo.RequestPostRemove;
 import com.oio.contentservice.vo.ResponsePostModify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -27,8 +28,10 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping(value = "/post/register/{nickName}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Long> register(@PathVariable("nickName") String nickName, @Valid @RequestBody PostDto postDto,
+    private final ReplyService replyService;
+
+    @PostMapping(value = "/post/register/{nickName}")
+    public Map<String, Long> register(@PathVariable("nickName") String nickName, @Valid PostDto postDto,
                                       BindingResult bindingResult) throws BindException {
 
 
@@ -65,9 +68,9 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(postDto);
     }
 
-    @PutMapping(value = "/post/{pno}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/post/{pno}")
     public ResponseEntity<ResponsePostModify> modify(@PathVariable("pno") Long pno,
-                                                     @Valid @RequestBody RequestPostModify RequestPostModify,
+                                                     @Valid RequestPostModify RequestPostModify,
                                                      BindingResult bindingResult) throws BindException {
 
         if (bindingResult.hasErrors()) {
@@ -81,12 +84,21 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(responseModify);
     }
 
-    @DeleteMapping("/post/{pno}")
-    public Map<String, Long> remove(@PathVariable("pno") Long pno) {
-
-        postService.removePost(pno);
+    @DeleteMapping ("/post/{pno}")
+    public Map<String, Long> remove(@PathVariable("pno") Long pno, RequestPostRemove requestPostRemove) {
 
         Map<String, Long> resultMap = new HashMap<>();
+
+        if(replyService.list(pno) != null && replyService.list(pno).size() > 0) {
+
+            resultMap.put("삭제 불가능 : ", pno);
+
+            return resultMap;
+        }
+
+        requestPostRemove.setPno(pno);
+
+        postService.removePost(requestPostRemove);
 
         resultMap.put("pno", pno);
 
