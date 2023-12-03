@@ -6,6 +6,7 @@ import lombok.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -33,8 +34,11 @@ public class PostDto {
     @NotNull
     private int key;
 
-    private String password;
+    private Long password;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
+
+    private List<String> fileNames;
+
 }

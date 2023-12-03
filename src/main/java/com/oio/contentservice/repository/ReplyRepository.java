@@ -11,4 +11,6 @@ public interface ReplyRepository extends JpaRepository<ReplyEntity, Long> {
     @Query("select r from ReplyEntity r where r.post.pno = :pno")
     List<ReplyEntity> listOfPost(Long pno);
 
+    void deleteByPost_Pno(Long pno);
+
 }

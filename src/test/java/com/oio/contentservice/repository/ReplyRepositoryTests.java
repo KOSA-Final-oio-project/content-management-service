@@ -17,7 +17,7 @@ public class ReplyRepositoryTests {
     @Test
     public void testRegister(){
 
-        Long pno = 1L;
+        Long pno = 3L;
 
         PostEntity postEntity = PostEntity.builder().pno(pno).build();
 

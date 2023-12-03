@@ -28,6 +28,13 @@ spring:
     username: admin
     password: oioProject2023
 
+  servlet:
+    multipart:
+      enabled: true
+      location: D:\\upload
+      max-request-size: 30MB
+      max-file-size: 10MB
+
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
@@ -40,6 +47,11 @@ eureka:
 logging:
   level:
     org.hibernate.sql: debug
+
+com:
+  oio:
+    upload:
+      path: D:\\upload
 
 #management:
 #  endpoints:

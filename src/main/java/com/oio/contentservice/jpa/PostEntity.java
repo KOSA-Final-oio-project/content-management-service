@@ -5,6 +5,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -47,16 +49,42 @@ public class PostEntity {
     @Column(nullable = true)
     private Long password;
 
-    @Column(nullable = false,updatable = false, insertable = false)
+    @Column(nullable = false, updatable = false, insertable = false)
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private Date createdAt;
+
+    @OneToMany(mappedBy = "post",
+            cascade = {CascadeType.ALL},
+            fetch = FetchType.LAZY,
+            orphanRemoval = true)
+    @Builder.Default
+    private Set<PostImage> imageSet = new HashSet<>();
 
     public void change(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
-    public void changeStatus(int status){
+    public void changeStatus(int status) {
         this.status = status;
     }
+
+
+    public void addImage(String uuid, String fileName) {
+
+        PostImage postImage = PostImage.builder()
+                .uuid(uuid)
+                .fileName(fileName)
+                .post(this)
+                .ord(imageSet.size())
+                .build();
+        imageSet.add(postImage);
+    }
+
+    public void clearImages() {
+        imageSet.forEach(postImage -> postImage.changePost(null));
+
+        this.imageSet.clear();
+    }
+
 }
