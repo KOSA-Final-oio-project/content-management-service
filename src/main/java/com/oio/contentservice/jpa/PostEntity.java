@@ -1,13 +1,17 @@
 package com.oio.contentservice.jpa;
 
-import com.oio.contentservice.jpa.status.Status;
-import lombok.Getter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Date;
 
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Table(name = "post")
 @SequenceGenerator(
         name = "SEQ_GENERATOR",
@@ -17,12 +21,11 @@ import java.util.List;
 public class PostEntity {
 
     @Id
-    @Column(name = "postId")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GENERATOR")
-    private Long id;
+    private Long pno;
 
     @Column(nullable = false)
-    private String memberEmail;
+    private String nickName;
 
     @Column(nullable = false)
     private String title;
@@ -30,10 +33,30 @@ public class PostEntity {
     @Column(nullable = false)
     private String content;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(nullable = false)
+    private String category;
 
-    @OneToMany(mappedBy = "post")
-    private List<ReplyEntity> replies;
+    @Column(nullable = false)
+    @Builder.Default
+    private int status = 0;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private int key = 0;
+
+    @Column(nullable = true)
+    private Long password;
+
+    @Column(nullable = false,updatable = false, insertable = false)
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    private Date createdAt;
+
+    public void change(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void changeStatus(int status){
+        this.status = status;
+    }
 }
