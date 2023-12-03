@@ -58,10 +58,10 @@ public class ReplyController {
         return ResponseEntity.status(HttpStatus.OK).body(responseReplyModify);
     }
 
-    @DeleteMapping("/reply/{rno}")
-    public ResponseEntity<Map<String, Long>> remove(@PathVariable("rno") Long rno) {
+    @DeleteMapping("/reply/{rno}/{pno}")
+    public ResponseEntity<Map<String, Long>> remove(@PathVariable("rno") Long rno, @PathVariable("pno") Long pno) {
 
-        replyService.remove(rno);
+        replyService.remove(rno, pno);
 
         Map<String, Long> resultMap = new HashMap<>();
 
@@ -69,7 +69,7 @@ public class ReplyController {
 
         return ResponseEntity.status(HttpStatus.OK).body(resultMap);
     }
-    @GetMapping("/replise/{pno}")
+    @GetMapping("/replies/{pno}")
     public ResponseEntity<List<ReplyDto>> getReplies(@PathVariable("pno") Long pno){
 
         List<ReplyDto> resultList = replyService.list(pno);

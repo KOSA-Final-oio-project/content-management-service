@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -15,7 +16,6 @@ public class PostDto {
 
     private Long pno;
 
-    @NotEmpty
     private String nickName;
 
     @NotEmpty
@@ -27,10 +27,10 @@ public class PostDto {
     @NotEmpty
     private String category;
 
-    @NotEmpty
+    @NotNull
     private int status;
 
-    @NotEmpty
+    @NotNull
     private int key;
 
     private String password;

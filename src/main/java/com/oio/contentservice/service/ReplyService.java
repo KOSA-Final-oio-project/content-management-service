@@ -12,7 +12,7 @@ public interface ReplyService {
 
     ResponseReplyModify modify(RequestReplyModify RequestReplyModify);
 
-    Long remove(Long rno);
+    Long remove(Long rno, Long pno);
 
     List<ReplyDto> list(Long pno);
 

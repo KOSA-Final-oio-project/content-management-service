@@ -27,11 +27,12 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping (value = "/post/register/{nickName}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/post/register/{nickName}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Long> register(@PathVariable("nickName") String nickName, @Valid @RequestBody PostDto postDto,
                                       BindingResult bindingResult) throws BindException {
 
-        if(bindingResult.hasErrors()){
+
+        if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
@@ -46,8 +47,8 @@ public class PostController {
         return resultMap;
     }
 
-    @GetMapping ("/posts")
-    public ResponseEntity<PageResponseDto> getPosts(PageRequestDto pageRequestDto){
+    @GetMapping("/posts")
+    public ResponseEntity<PageResponseDto> getPosts(PageRequestDto pageRequestDto) {
 
 //        List<PostDto> postList = postService.getPostAll();
 
@@ -57,19 +58,19 @@ public class PostController {
     }
 
     @GetMapping("/post/{pno}")
-    public ResponseEntity<PostDto> getPost(@PathVariable("pno") Long pno){
+    public ResponseEntity<PostDto> getPost(@PathVariable("pno") Long pno) {
 
         PostDto postDto = postService.getPostById(pno);
 
         return ResponseEntity.status(HttpStatus.OK).body(postDto);
     }
 
-    @PutMapping(value = "/post/{pno}" , consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/post/{pno}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponsePostModify> modify(@PathVariable("pno") Long pno,
                                                      @Valid @RequestBody RequestPostModify RequestPostModify,
                                                      BindingResult bindingResult) throws BindException {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
@@ -81,7 +82,7 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{pno}")
-    public Map<String, Long> remove(@PathVariable("pno") Long pno){
+    public Map<String, Long> remove(@PathVariable("pno") Long pno) {
 
         postService.removePost(pno);
 
