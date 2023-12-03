@@ -12,29 +12,16 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PostDto {
+public class ReplyDto {
 
+    private Long rno;
+    @NotNull
     private Long pno;
-
-    private String nickName;
-
     @NotEmpty
-    private String title;
-
+    private String replyText;
     @NotEmpty
-    private String content;
-
-    @NotEmpty
-    private String category;
-
-    @NotNull
-    private int status;
-
-    @NotNull
-    private int key;
-
-    private String password;
-
+    private String replyer;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
+
 }

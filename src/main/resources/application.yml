@@ -1,9 +1,14 @@
 server:
-  port: 0
+  port: 8889
 
 spring:
-  application:
-    name: content-service
+#  application:
+#    name: content-service
+#  rabbitmq:
+#    host: 127.0.0.1
+#    port: 5672
+#    username: guest
+#    password: guest
   h2:
     console:
       enabled: true
@@ -27,11 +32,17 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    register-with-eureka: false
+    fetch-registry: false
     service-url:
       defaultZone: http://localhost:8761/eureka
 
 logging:
   level:
     org.hibernate.sql: debug
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, busrefresh
