@@ -12,14 +12,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ReplyServiceImpl implements ReplyService{
+public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
 
@@ -28,7 +26,7 @@ public class ReplyServiceImpl implements ReplyService{
     private final ModelMapper modelMapper;
 
     @Override
-    public Long register(ReplyDto replyDto) {
+    public void register(ReplyDto replyDto) {
 
         ReplyEntity replyEntity = modelMapper.map(replyDto, ReplyEntity.class);
 
@@ -41,8 +39,6 @@ public class ReplyServiceImpl implements ReplyService{
         postEntity.changeStatus(1);
 
         postRepository.save(postEntity);
-
-        return rno;
     }
 
     @Override
@@ -78,19 +74,28 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
-    public List<ReplyDto> list(Long pno) {
+    public Map<String, Object> list(Long pno, String nickName) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        boolean isEquals = false;
 
         List<ReplyEntity> entityList = replyRepository.listOfPost(pno);
 
+        if (nickName.equals("관리자")) {
+            isEquals = true;
+        }
+
         List<ReplyDto> resultList = new ArrayList<>();
 
-        entityList.forEach(replyEntity->{
+        entityList.forEach(replyEntity -> {
             ReplyDto replyDto = modelMapper.map(replyEntity, ReplyDto.class);
             resultList.add(replyDto);
         });
 
-        return resultList;
-    }
+        resultMap.put("resultList", resultList);
+        resultMap.put("isEquals", isEquals);
 
+        return resultMap;
+    }
 
 }

@@ -12,5 +12,4 @@ public interface ReplyRepository extends JpaRepository<ReplyEntity, Long> {
     List<ReplyEntity> listOfPost(Long pno);
 
     void deleteByPost_Pno(Long pno);
-
 }

@@ -9,22 +9,23 @@ import com.oio.contentservice.vo.RequestPostRemove;
 import com.oio.contentservice.vo.ResponsePostModify;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public interface PostService {
 
     Long register(PostDto postDto);
 
-    List<PostDto> getPostAll();
+    List<PostDto> getPostAll(String nickName);
 
-    PostDto getPostById(Long pno);
+    Map<String, Object> getPostById(Long pno, String nickName);
 
     ResponsePostModify modifyPost(RequestPostModify RequestPostModify);
 
     void removePost(RequestPostRemove requestPostRemove);
 
     // 게시글 페이징
-    PageResponseDto<PostDto> getPosts(PageRequestDto pageRequestDto);
+    PageResponseDto<PostDto> getPosts(PageRequestDto pageRequestDto, String category);
 
     default PostEntity dtoToEntity(PostDto postDto){
 

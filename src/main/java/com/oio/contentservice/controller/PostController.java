@@ -4,7 +4,6 @@ import com.oio.contentservice.dto.PageRequestDto;
 import com.oio.contentservice.dto.PageResponseDto;
 import com.oio.contentservice.dto.PostDto;
 import com.oio.contentservice.service.PostService;
-import com.oio.contentservice.service.ReplyService;
 import com.oio.contentservice.vo.RequestPostModify;
 import com.oio.contentservice.vo.RequestPostRemove;
 import com.oio.contentservice.vo.ResponsePostModify;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/")
@@ -27,8 +27,6 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
-
-    private final ReplyService replyService;
 
     @PostMapping(value = "/post/register/{nickName}")
     public Map<String, Long> register(@PathVariable("nickName") String nickName, @Valid PostDto postDto,
@@ -50,22 +48,34 @@ public class PostController {
         return resultMap;
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<PageResponseDto> getPosts(PageRequestDto pageRequestDto) {
+    // 게시글 전체 조회
+    @GetMapping("/posts/{category}")
+    public ResponseEntity<PageResponseDto> getPosts(@PathVariable("category") String category, PageRequestDto pageRequestDto) {
 
 //        List<PostDto> postList = postService.getPostAll();
 
-        PageResponseDto<PostDto> pageResponseDto = postService.getPosts(pageRequestDto);
+        PageResponseDto<PostDto> pageResponseDto = postService.getPosts(pageRequestDto,category);
 
         return ResponseEntity.status(HttpStatus.OK).body(pageResponseDto);
     }
 
-    @GetMapping("/post/{pno}")
-    public ResponseEntity<PostDto> getPost(@PathVariable("pno") Long pno) {
 
-        PostDto postDto = postService.getPostById(pno);
+    // 내가 쓴 게시글 조회
+    @GetMapping("/posts/member/{nickName}")
+    public ResponseEntity<List<PostDto>> getPostsByNicKName(@PathVariable("nickName") String nickName) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(postDto);
+        List<PostDto> postList = postService.getPostAll(nickName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(postList);
+    }
+
+    // 게시글 조회
+    @GetMapping("/post/{pno}/{nickName}")
+    public ResponseEntity<Map<String, Object>> getPost(@PathVariable("pno") Long pno, @PathVariable("nickName") String nickName) {
+
+        Map<String, Object> resultMap= postService.getPostById(pno, nickName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resultMap);
     }
 
     @PutMapping(value = "/post/{pno}")
@@ -88,13 +98,6 @@ public class PostController {
     public Map<String, Long> remove(@PathVariable("pno") Long pno, RequestPostRemove requestPostRemove) {
 
         Map<String, Long> resultMap = new HashMap<>();
-
-        if(replyService.list(pno) != null && replyService.list(pno).size() > 0) {
-
-            resultMap.put("삭제 불가능 : ", pno);
-
-            return resultMap;
-        }
 
         requestPostRemove.setPno(pno);
 

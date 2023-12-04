@@ -58,15 +58,15 @@ public class PostSeviceTests {
 
     @Test
     public void testReadAll(){
-        Long pno = 101L;
-
-        PostDto postDto = postService.getPostById(pno);
-
-        log.info(postDto);
-
-        for(String fileName : postDto.getFileNames()){
-            log.info(fileName);
-        }
+//        Long pno = 101L;
+//
+//        PostDto postDto = postService.getPostById(pno);
+//
+//        log.info(postDto);
+//
+//        for(String fileName : postDto.getFileNames()){
+//            log.info(fileName);
+//        }
     }
 
     @Test

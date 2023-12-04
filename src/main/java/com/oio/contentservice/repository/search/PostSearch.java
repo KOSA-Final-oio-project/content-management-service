@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostSearch {
 
-    Page<PostEntity> searchAll(String[] types, String keyword, Pageable pageable);
+    Page<PostEntity> searchAll(String[] types, String keyword, Pageable pageable,String category);
 
 
 
