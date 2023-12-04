@@ -18,26 +18,32 @@ public class PostSearchImpl extends QuerydslRepositorySupport implements PostSea
     }
 
     @Override
-    public Page<PostEntity> searchAll(String[] types, String keyword, Pageable pageable) {
+    public Page<PostEntity> searchAll(String[] types, String keyword, Pageable pageable, String category) {
 
         QPostEntity post = QPostEntity.postEntity;
         JPQLQuery<PostEntity> query = from(post);
 
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        booleanBuilder.and(post.category.contains(category));
+
+        query.where(booleanBuilder);
+
         if ((types != null && types.length > 0) && keyword != null) {
-            BooleanBuilder booleanBuilder = new BooleanBuilder();
 
             for (String type : types) {
                 switch (type) {
                     case "t":
-                        booleanBuilder.or(post.title.contains(keyword));
+                        booleanBuilder.and(post.title.contains(keyword));
                         break;
                     case "w":
-                        booleanBuilder.or(post.nickName.contains(keyword));
+                        booleanBuilder.and(post.nickName.contains(keyword));
                         break;
                 }
             }
             query.where(booleanBuilder);
         }
+
         query.where(post.pno.gt(0L));
 
         this.getQuerydsl().applyPagination(pageable, query);

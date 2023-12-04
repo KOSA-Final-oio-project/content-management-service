@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,19 +25,25 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @PostMapping(value = "/reply/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Long>> register(@Valid @RequestBody ReplyDto replyDto,
-                                                      BindingResult bindingResult) throws BindException {
+    @PostMapping(value = "/reply/register/{nickName}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> register(@PathVariable("nickName") String nickName, @Valid @RequestBody ReplyDto replyDto,
+                                                        BindingResult bindingResult) throws BindException {
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
-        Long rno = replyService.register(replyDto);
+        Map<String, String> resultMap = new HashMap<>();
 
-        Map<String, Long> resultMap = new HashMap<>();
+        if (!nickName.equals("관리자")) {
+            resultMap.put("msg", "fail");
+        }
 
-        resultMap.put("댓글 등록 완료: ", rno);
+        replyDto.setReplyer(nickName);
+
+        replyService.register(replyDto);
+
+        resultMap.put("msg", "success");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(resultMap);
     }
@@ -59,29 +64,24 @@ public class ReplyController {
     }
 
     @DeleteMapping("/reply/{rno}/{pno}")
-    public ResponseEntity<Map<String, Long>> remove(@PathVariable("rno") Long rno, @PathVariable("pno") Long pno) {
+    public ResponseEntity<Map<String, String>> remove(@PathVariable("rno") Long rno, @PathVariable("pno") Long pno) {
 
         replyService.remove(rno, pno);
 
-        Map<String, Long> resultMap = new HashMap<>();
+        Map<String, String> resultMap = new HashMap<>();
 
-        resultMap.put("댓글 삭제 완료 : ", rno);
+        resultMap.put("msg", "success");
 
         return ResponseEntity.status(HttpStatus.OK).body(resultMap);
     }
-    @GetMapping("/replies/{pno}")
-    public ResponseEntity<List<ReplyDto>> getReplies(@PathVariable("pno") Long pno){
 
-        List<ReplyDto> resultList = replyService.list(pno);
+    @GetMapping("/replies/{pno}/{nickName}")
+    public ResponseEntity<Map<String, Object>> getReplies(@PathVariable("pno") Long pno, @PathVariable("nickName") String nickName) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(resultList);
+        Map<String, Object> resultMap = replyService.list(pno, nickName);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resultMap);
     }
-
-
-
-
-
-
 
 
 }

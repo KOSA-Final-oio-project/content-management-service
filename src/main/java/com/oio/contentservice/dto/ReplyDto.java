@@ -19,7 +19,6 @@ public class ReplyDto {
     private Long pno;
     @NotEmpty
     private String replyText;
-    @NotEmpty
     private String replyer;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long>, PostSearch {
@@ -13,5 +14,11 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>, PostSea
     @EntityGraph(attributePaths = {"imageSet"})
     @Query("select p from PostEntity p where p.pno = :pno")
     Optional<PostEntity> findByIdWithImages(Long pno);
+
+    @Query("select p from PostEntity p where p.nickName = :nickName and p.category = 'Q&A'")
+    List<PostEntity> findByNickName(String nickName);
+
+
+
 
 }
