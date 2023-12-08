@@ -1,14 +1,14 @@
 server:
-  port: 8889
+  port: 0
 
 spring:
-#  application:
-#    name: content-service
-#  rabbitmq:
-#    host: 127.0.0.1
-#    port: 5672
-#    username: guest
-#    password: guest
+  application:
+    name: content-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   h2:
     console:
       enabled: true
@@ -22,11 +22,17 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@oioproject_high?TNS_ADMIN=/oracleCloud/Wallet_oioproject
-    username: admin
-    password: oioProject2023
+
+#  datasource:
+#    driver-class-name: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@oioproject_high?TNS_ADMIN=/oracleCloud/Wallet_oioproject
+#    username: admin
+#    password: oioProject2023
+#  datasource:
+#    driver-class-name: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@localhost:1521:orcl
+#    username: test
+#    password: test
 
   servlet:
     multipart:
@@ -39,8 +45,8 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
 
@@ -53,8 +59,8 @@ com:
     upload:
       path: D:\\upload
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: health, busrefresh
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, busrefresh
