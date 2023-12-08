@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: content-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   h2:
     console:
       enabled: true
@@ -17,11 +22,24 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@oioproject_high?TNS_ADMIN=/oracleCloud/Wallet_oioproject
-    username: admin
-    password: oioProject2023
+
+#  datasource:
+#    driver-class-name: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@oioproject_high?TNS_ADMIN=/oracleCloud/Wallet_oioproject
+#    username: admin
+#    password: oioProject2023
+#  datasource:
+#    driver-class-name: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@localhost:1521:orcl
+#    username: test
+#    password: test
+
+  servlet:
+    multipart:
+      enabled: true
+      location: D:\\upload
+      max-request-size: 30MB
+      max-file-size: 10MB
 
 eureka:
   instance:
@@ -35,3 +53,14 @@ eureka:
 logging:
   level:
     org.hibernate.sql: debug
+
+com:
+  oio:
+    upload:
+      path: D:\\upload
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, busrefresh
