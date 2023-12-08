@@ -30,7 +30,7 @@ public class ReplyServiceImpl implements ReplyService {
 
         ReplyEntity replyEntity = modelMapper.map(replyDto, ReplyEntity.class);
 
-        Long rno = replyRepository.save(replyEntity).getRno();
+        replyRepository.save(replyEntity);
 
         Optional<PostEntity> result = postRepository.findById(replyDto.getPno());
 
