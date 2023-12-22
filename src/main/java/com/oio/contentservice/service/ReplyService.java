@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface ReplyService {
 
-    void register(ReplyDto replyDto);
+    Long register(ReplyDto replyDto);
 
     ResponseReplyModify modify(RequestReplyModify RequestReplyModify);
 

@@ -39,6 +39,8 @@ public class PostServiceImpl implements PostService {
 
     private final ModelMapper modelMapper;
 
+    private final S3FileService s3FileService;
+
     @Override
     public Long register(PostDto postDto) {
 
@@ -122,7 +124,11 @@ public class PostServiceImpl implements PostService {
 
         List<String> fileNames = requestPostRemove.getFileNames();
         if(fileNames != null && fileNames.size() > 0) {
-            removeFiles(fileNames);
+            fileNames.forEach(fileName->{
+                System.out.println(fileName);
+                s3FileService.removeS3File(fileName);
+            });
+//            removeFiles(fileNames);
         }
     }
 

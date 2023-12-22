@@ -1,14 +1,14 @@
 server:
-  port: 0
+  port: 10004
 
 spring:
   application:
     name: content-service
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
+#  rabbitmq:
+#    host: 127.0.0.1
+#    port: 5672
+#    username: guest
+#    password: guest
   h2:
     console:
       enabled: true
@@ -37,18 +37,20 @@ spring:
   servlet:
     multipart:
       enabled: true
-      location: D:\\upload
+#      location: D:\\upload
       max-request-size: 30MB
       max-file-size: 10MB
 
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://192.168.1.86:8761/eureka
+#      defaultZone: http://127.0.0.1:8761/eureka
 
 logging:
   level:
@@ -59,8 +61,20 @@ com:
     upload:
       path: D:\\upload
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, busrefresh
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, busrefresh
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAQW4O2QARZML56UGF
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    s3:
+      bucket: oioproject-bucket
+
