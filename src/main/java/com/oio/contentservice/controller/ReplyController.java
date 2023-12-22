@@ -41,9 +41,9 @@ public class ReplyController {
 
         replyDto.setReplyer(nickName);
 
-        replyService.register(replyDto);
+        Long rno = replyService.register(replyDto);
 
-        resultMap.put("msg", "success");
+        resultMap.put("msg", Long.toString(rno));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(resultMap);
     }

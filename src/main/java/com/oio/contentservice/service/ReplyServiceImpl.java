@@ -26,11 +26,11 @@ public class ReplyServiceImpl implements ReplyService {
     private final ModelMapper modelMapper;
 
     @Override
-    public void register(ReplyDto replyDto) {
+    public Long register(ReplyDto replyDto) {
 
         ReplyEntity replyEntity = modelMapper.map(replyDto, ReplyEntity.class);
 
-        replyRepository.save(replyEntity);
+        Long rno = replyRepository.save(replyEntity).getRno();
 
         Optional<PostEntity> result = postRepository.findById(replyDto.getPno());
 
@@ -39,6 +39,8 @@ public class ReplyServiceImpl implements ReplyService {
         postEntity.changeStatus(1);
 
         postRepository.save(postEntity);
+
+        return rno;
     }
 
     @Override

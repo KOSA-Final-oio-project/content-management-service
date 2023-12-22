@@ -32,16 +32,26 @@ public class PostController {
     public Map<String, Long> register(@PathVariable("nickName") String nickName, @Valid PostDto postDto,
                                       BindingResult bindingResult) throws BindException {
 
+        System.out.println(postDto);
+
+        Map<String, Long> resultMap = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
 
+        if (postDto.getCategory().equals("공지사항")) {
+            if (!nickName.equals("관리자")) {
+
+                resultMap.put("게시글 등록 실패", 0L);
+
+                return resultMap;
+            }
+        }
+
         postDto.setNickName(nickName);
 
         Long pno = postService.register(postDto);
-
-        Map<String, Long> resultMap = new HashMap<>();
 
         resultMap.put("게시글 등록 번호: ", pno);
 
@@ -54,7 +64,7 @@ public class PostController {
 
 //        List<PostDto> postList = postService.getPostAll();
 
-        PageResponseDto<PostDto> pageResponseDto = postService.getPosts(pageRequestDto,category);
+        PageResponseDto<PostDto> pageResponseDto = postService.getPosts(pageRequestDto, category);
 
         return ResponseEntity.status(HttpStatus.OK).body(pageResponseDto);
     }
@@ -73,15 +83,17 @@ public class PostController {
     @GetMapping("/post/{pno}/{nickName}")
     public ResponseEntity<Map<String, Object>> getPost(@PathVariable("pno") Long pno, @PathVariable("nickName") String nickName) {
 
-        Map<String, Object> resultMap= postService.getPostById(pno, nickName);
+        Map<String, Object> resultMap = postService.getPostById(pno, nickName);
 
         return ResponseEntity.status(HttpStatus.OK).body(resultMap);
     }
 
     @PutMapping(value = "/post/{pno}")
     public ResponseEntity<ResponsePostModify> modify(@PathVariable("pno") Long pno,
-                                                     @Valid RequestPostModify RequestPostModify,
+                                                     @Valid @RequestBody RequestPostModify RequestPostModify,
                                                      BindingResult bindingResult) throws BindException {
+
+        System.out.println(RequestPostModify);
 
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
@@ -94,8 +106,8 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(responseModify);
     }
 
-    @DeleteMapping ("/post/{pno}")
-    public Map<String, Long> remove(@PathVariable("pno") Long pno, RequestPostRemove requestPostRemove) {
+    @DeleteMapping("/post/{pno}")
+    public Map<String, Long> remove(@PathVariable("pno") Long pno, @RequestBody RequestPostRemove requestPostRemove) {
 
         Map<String, Long> resultMap = new HashMap<>();
 
