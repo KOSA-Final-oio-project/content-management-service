@@ -69,12 +69,12 @@ com:
 cloud:
   aws:
     credentials:
-      access-key: AKIAQW4O2QARZML56UGF
-      secret-key: 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
+      access-key: 
+      secret-key: 
     region:
       static: ap-northeast-2
     stack:
       auto: false
     s3:
-      bucket: oioproject-bucket
+      bucket: 
 
